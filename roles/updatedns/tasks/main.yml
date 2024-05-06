@@ -1,0 +1,41 @@
+#- name: Update DNS server
+  #lineinfile:
+    #path: /etc/resolv.conf
+    #regexp: '^nameserver'
+    #line: 'nameserver {{ dns_server_ip }}'
+    #state: present
+    #backup: yes
+      
+- name: Set fact with IP address
+  set_fact:
+    ip_address: "{{ ansible_default_ipv4.address }}"
+
+- name: Get via value
+  ansible.builtin.shell: "grep -oP '(?<=via: ).*' /etc/netplan/00-installer-config.yaml"
+  register: via_var
+
+- name: Set variable with via value
+  set_fact:
+    via_value: "{{ via_var.stdout_lines[0] }}"
+
+- name: Set permissions for netplan config file
+  become: true
+  file:
+    path: /etc/netplan/00-installer-config.yaml
+    mode: '0644'      
+
+- name: Create backup of netplan file
+  become: true
+  copy:
+    src: /etc/netplan/00-installer-config.yaml
+    dest: /etc/netplan/00-installer-config.yaml.back
+    remote_src: yes  
+
+- name: Update netplan file
+  template:
+    src: templates/netplan.j2
+    dest: /etc/netplan/00-installer-config.yaml
+
+- name: Apply netplan configuration
+  become: true
+  command: netplan apply 

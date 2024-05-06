@@ -1,0 +1,3 @@
+users:
+- name: p.heydari
+  pubkey: "{{ lookup('file', 'files/parmida.pub') }}"

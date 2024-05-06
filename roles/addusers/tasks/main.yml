@@ -1,0 +1,30 @@
+---
+- name: Create users
+  become: true
+  user:
+    name: "{{ item.name }}"
+    groups: sudo
+    shell: /bin/bash
+    createhome: yes
+    home: "/home/{{ item.name }}"  
+  with_items: "{{ users }}"
+
+- name: Add public keys to authorized_keys
+  authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.pubkey }}"
+  with_items: "{{ users }}"
+
+- name: Create backup of sudoers file
+  copy:
+    src: /etc/sudoers
+    dest: /etc/sudoers.back
+    remote_src: yes
+
+- name: Configure sudoers
+  lineinfile:
+    path: /etc/sudoers
+    line: "{{ item.name }} ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"
+  with_items: "{{ users }}"
+

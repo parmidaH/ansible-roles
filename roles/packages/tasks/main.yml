@@ -1,0 +1,60 @@
+- name: Backup sources.list
+  become: true
+  copy:
+    src: "/etc/apt/sources.list"
+    dest: "/etc/apt/sources.list.back"
+    remote_src: yes
+
+- name: Copy new sources.list
+  become: true
+  copy:
+    #src: "/home/pc/ansible-tuning/roles/updaterepo/files/sources.list"
+    src: "{{ sources_list_path }}"
+    dest: /etc/apt/sources.list
+
+- name: Update package list
+  become: true
+  ansible.builtin.apt:  
+    update_cache: yes
+
+- name: Upgrade all packages
+  become: true
+  ansible.builtin.apt:  
+    upgrade: yes
+
+- name: Install packages
+  become: true
+  apt:
+    name:
+      - telnet
+      - tmux
+      - vim
+      - tcpdump
+      - mtr
+      - git
+      - iftop
+      - ncdu
+      - nmon
+      - sysstat
+      - net-tools  
+      - iotop
+      - screen
+      - traceroute
+      - arping
+      - ethtool
+      - lsof
+      - ntpdate
+      - mlocate
+      - dlocate
+      - build-essential
+      - gdisk
+      - tree
+      - links  
+      - curl
+      - less
+      - rsync
+      - xfsprogs
+      - whois
+      - dnsutils  
+    state: present
+  become: true          

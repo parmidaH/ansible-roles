@@ -1,0 +1,6 @@
+- name: Set timezone to Asia/Tehran
+  community.general.timezone:
+    name: Asia/Tehran
+
+      #- name: Set timezone to Asia/Tehran
+      #command: timedatectl set-timezone Asia/Tehran

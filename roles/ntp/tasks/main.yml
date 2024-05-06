@@ -1,0 +1,27 @@
+---
+- name: Install NTP
+  apt:
+    name: ntp
+    state: present
+  become: true
+
+- name: Create backup of ntp.conf file
+  copy:
+    src: /etc/ntp.conf
+    dest: /etc/ntp.conf.back
+    remote_src: yes  
+          
+- name: Configure NTP
+  template:
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+  notify:
+    - restart ntp
+
+- name: enable ntp
+  become: true
+  service:
+    name: ntp
+    enabled: yes
+  notify: 
+    - restart ntp    

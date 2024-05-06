@@ -1,0 +1,20 @@
+- name: Disable IPv6
+  sysctl:
+    name: "{{ item }}"
+    value: 1
+    state: present
+    sysctl_set: yes
+  with_items:
+    - net.ipv6.conf.all.disable_ipv6
+    - net.ipv6.conf.default.disable_ipv6
+    - net.ipv6.conf.lo.disable_ipv6
+
+- name: Set fs.file-max
+  sysctl:
+    name: fs.file-max
+    value: 500000
+    state: present
+    sysctl_set: yes
+
+- name: Save sysctl settings
+  command: sysctl -p /etc/sysctl.conf

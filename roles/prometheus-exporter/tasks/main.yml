@@ -1,0 +1,44 @@
+- name: Move directory to /usr/local/bin
+  copy:
+    src: "{{ prometheus_path }}"
+    dest: /usr/local/bin/
+
+- name: Create symbolic link for directory
+  become: true
+  file:
+    src: /usr/local/bin/node_exporter
+    dest: /usr/bin/node_exporter
+    state: link
+
+- name: Change permissions of node_exporter
+  file:
+    path: /usr/local/bin/node_exporter
+    mode: u+x
+
+- name: Create node_exporter.service file
+  become: true
+  file:
+    path: /etc/systemd/system/node_exporter.service
+    state: touch
+
+- name: Write contents to node_exporter.service file
+  become: true
+  copy:
+    dest: /etc/systemd/system/node_exporter.service
+    content: "[Unit]\nDescription=Prometheus Node Exporter\nWants=network-online.target\nAfter=network-online.target\n#magic___^_^___line\n[Service]\n#User=node_exporter\n#Group=node_exporter\nType=simple\nExecStart=/usr/local/bin/node_exporter --collector.filesystem.ignored-mount-points=\"^/(sys|proc|dev|run)($|/)\" --collector.diskstats.ignored-devices=\"^(ram|loop|fd)\\d+$\" --collector.filesystem.ignored-fs-types=\"^(squashfs|autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs|tmpfs)$\" --collector.netdev.device-blacklist=\"^(lo|docker[0-9]|kube-ipvs0|dummy0|kube-dummy-if|veth.+|br\\-.+|cali\\w{11}|tunl0|tun\\-.+)$\"\n[Install]\nWantedBy=multi-user.target      \n#magic___^_^___line\n"
+- name: Reload systemd daemon
+  become: true
+  systemd:
+    daemon-reload: yes
+
+- name: enable node_exporter
+  become: true
+  service:
+    name: node_exporter
+    enabled: yes
+
+- name: restart node_exporter
+  become: true
+  service:
+    name: node_exporter
+    state: restarted

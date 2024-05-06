@@ -1,0 +1,5 @@
+pv_name: /dev/sdb
+#pv_name: data-pv  
+vg_name: data-vg
+lv_name: data-lv
+mount_point: /srv/data.vol

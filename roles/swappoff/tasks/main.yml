@@ -1,0 +1,16 @@
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+
+- name: Disable SWAP since reboot
+  command: swapoff -a
+
+- name: Disable SWAP permanently
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'    

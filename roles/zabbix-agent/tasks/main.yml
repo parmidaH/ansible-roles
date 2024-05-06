@@ -1,0 +1,39 @@
+---
+- name: Set ansible_hostname dynamically
+  set_fact:
+    ansible_hostname: "{{ inventory_hostname }}"
+
+- name: Set listenIp dynamically
+  set_fact:
+    listenIp: "{{ ansible_host }}"      
+
+- name: Install Zabbix agent
+  apt:
+    name: zabbix-agent2
+    state: present
+  become: true
+
+- name: Create backup of zabbix_agentd.conf file
+  become: true
+  copy:
+    src: /etc/zabbix/zabbix_agent2.conf
+    dest: /etc/zabbix/zabbix_agentd.conf.back
+    remote_src: yes    
+
+- name: Configure Zabbix agent
+  template:
+    src: zabbix_agentd.conf.j2
+    dest: /etc/zabbix/zabbix_agent2.conf
+    owner: root
+    group: root
+    mode: '0644'  
+  notify:
+    - restart zabbix-agent
+
+- name: enable zabbix-agent
+  become: true
+  service:
+    name: zabbix-agent2
+    enabled: yes
+  notify:
+    - restart zabbix-agent    

@@ -1,0 +1,36 @@
+- name: Create physical volume
+  lvm_pv:
+    pv: "{{ pv_name }}"
+  register: pv_created
+
+- name: Create volume group
+  lvm_vg:
+    vg: "{{ vg_name }}"
+    pvs: "{{ pv_name }}"
+  when: pv_created.changed
+
+- name: Create logical volume
+  lvm_lv:
+    vg: "{{ vg_name }}"
+    lv: "{{ lv_name }}"
+    size: 100%FREE
+  when: pv_created.changed
+
+- name: Create mount point directory
+  file:
+    path: "{{ mount_point }}"
+    state: directory
+
+- name: Format logical volume with ext4
+  filesystem:
+    fstype: ext4
+    dev: "/dev/{{ vg_name }}/{{ lv_name }}"
+
+- name: Add mount to fstab
+  lineinfile:
+    path: /etc/fstab
+    line: "/dev/{{ vg_name }}/{{ lv_name }} {{ mount_point }} ext4 defaults 0 0"
+    state: present
+   
+- name: Mount all file systems listed in /etc/fstab
+  command: mount -a      

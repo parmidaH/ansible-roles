@@ -1,0 +1,25 @@
+- hosts: all
+  become: true
+  #gather_facts: false 
+  roles:
+#- addusers
+#- rootpass
+#- addpubkey
+#- updatedns
+#- packages  
+#- ntp  
+#- prometheus-exporter
+#- timedate
+#- splunk
+#- zabbix-agent
+#- firewall  
+#- sshconf  
+#- prometheus-exporter-rollback
+#- sysctlconf
+#- sysctlconf-rollback
+#- swappoff
+#- lvm
+#- ping
+#- nfsclient  
+#- deluser
+#- rmrootkey

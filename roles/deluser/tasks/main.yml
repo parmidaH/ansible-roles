@@ -1,0 +1,7 @@
+---
+- name: Delete user and home directory
+  become: yes
+  user:
+    name: tmp2023
+    state: absent
+    remove: yes

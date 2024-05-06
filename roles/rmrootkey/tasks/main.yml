@@ -1,0 +1,4 @@
+- name: Completely remove root's authorized keys file
+  file:
+    path: /root/.ssh/authorized_keys
+    state: absent

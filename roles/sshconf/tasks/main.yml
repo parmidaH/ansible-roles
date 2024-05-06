@@ -1,0 +1,14 @@
+- name: Create backup of sshd_config file
+  copy:
+    src: /etc/ssh/sshd_config
+    dest: /etc/ssh/sshd_config.back
+    remote_src: yes  
+
+- name: Change SSH port
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?Port'
+    line: 'Port {{ ssh_port }}'
+  notify:
+    - restart sshd
+    

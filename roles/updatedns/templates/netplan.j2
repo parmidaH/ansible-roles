@@ -1,0 +1,15 @@
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens33:
+      addresses:
+        -  {{ ip_address }}/24
+      nameservers:
+        addresses:
+          - {{ dns_server_ip_1 }}
+          - {{ dns_server_ip_2 }}
+      #search: []
+      routes:
+        - to: default
+          via: {{ via_value }}
+  version: 2

@@ -1,0 +1,34 @@
+- name: Delete node_exporter.service file
+  become: true
+  file:
+    path: /etc/systemd/system/node_exporter.service
+    state: absent
+
+- name: Delete node_exporter
+  become: true
+  file:
+    path: /usr/local/bin/node_exporter
+    state: absent
+
+- name: Delete symbolic link
+  become: true
+  file:
+    path: /usr/bin/node_exporter
+    state: absent
+    
+- name: disable node_exporter
+  become: true
+  service:
+    name: node_exporter.service
+    enabled: no
+
+- name: stop node_exporter
+  become: true
+  service:
+    name: node_exporter.service
+    state: stopped
+  
+- name: Reload systemd daemon
+  become: true
+  systemd:
+    daemon-reload: yes    

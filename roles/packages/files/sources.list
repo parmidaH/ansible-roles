@@ -1,0 +1,10 @@
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy main restricted
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy-updates main restricted
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy universe
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy-updates universe
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy multiverse
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy-updates multiverse
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy-backports main restricted universe multiverse
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy-security main restricted
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy-security universe
+deb [trusted=yes] https://jfrog.snpx.dev/artifactory/apt jammy-security multiverse
