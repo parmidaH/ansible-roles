@@ -16,5 +16,5 @@ For runnig the playbook you can use command below \
  (-i: define inventory file, -l: define group of inventory):
 
 ```bash
-ansible-playbook -i inventories/host.ini playbook.yml  -l bastion --ask-become-pass -vv
+ansible-playbook -i inventories/host.ini playbook.yml  -l bastion --ask-become-pass -vvv
 ```
